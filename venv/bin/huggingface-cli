@@ -1,4 +1,4 @@
-#!/Users/saurav/Downloads/yt-transcriber-fastapi/venv/bin/python3
+#!/Users/saurav/Desktop/YT-transcripter/venv/bin/python3.11
 # -*- coding: utf-8 -*-
 import re
 import sys

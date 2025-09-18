@@ -1,98 +1,92 @@
-# YouTube Transcriber (FastAPI + Python)
+# 🎙️ YouTube Transcriber & Summarizer API
 
-A tiny API service that downloads a YouTube video's audio and transcribes it locally using [faster-whisper](https://github.com/guillaumekln/faster-whisper).
+A FastAPI-based service that:
+- Downloads audio from a YouTube video
+- Transcribes it using [OpenAI Whisper](https://github.com/openai/whisper)
+- Summarizes the transcription using [Hugging Face Transformers](https://huggingface.co/facebook/bart-large-cnn)
 
-> **Heads-up:** You need **FFmpeg** installed on your system (yt-dlp uses it to extract audio).
+---
 
-## Quickstart
+## 🚀 Features
+- Input: YouTube video URL
+- Output: JSON with full transcription + concise summary
+- Interactive API docs at: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
+---
+
+## 📦 Requirements
+
+- Python 3.11
+- [FFmpeg](https://ffmpeg.org/download.html) (must be installed and in PATH)
+
+Install FFmpeg:
 ```bash
-# 1) Create & activate a venv (recommended)
-python -m venv .venv
-source .venv/bin/activate  # on Windows: .venv\Scripts\activate
+# macOS
+brew install ffmpeg
 
-# 2) Install system dependency (Ubuntu/Debian)
-sudo apt-get update && sudo apt-get install -y ffmpeg
+# Ubuntu/Debian
+sudo apt update && sudo apt install ffmpeg -y
 
-# 3) Install Python deps
+# Windows (Chocolatey)
+choco install ffmpeg
+
+
+🔧 Setup
+
+Clone this repository:
+
+git clone https://github.com/saurav-wankhade/yt-transcripter.git
+cd yt-transcripter
+
+
+Create and activate a virtual environment:
+
+python3.11 -m venv venv
+source venv/bin/activate   # macOS/Linux
+venv\Scripts\activate      # Windows
+
+
+Install dependencies:
+
 pip install -r requirements.txt
 
-# 4) (Optional) Choose a model — tiny/base/small/medium/large-v3
-export WHISPER_MODEL=tiny
-# You can also tweak device & compute type:
-# export WHISPER_DEVICE=auto   # "auto", "cpu", or "cuda"
-# export WHISPER_COMPUTE_TYPE=int8_float16  # "int8", "float16", "float32", etc.
+▶️ Run the API
 
-# 5) Run the API
-uvicorn app:app --reload --host 0.0.0.0 --port 8000
-```
+Start the FastAPI server:
 
-Open: http://localhost:8000/docs to try it out.
+uvicorn app:app --reload
 
-## Usage
 
-**POST** `/transcribe`
+On startup, you’ll see:
 
-Request body (JSON):
-```json
+📌 Open the API docs here: http://127.0.0.1:8000/docs
+
+📘 Usage
+
+1. Go to http://127.0.0.1:8000/docs
+2. Use the /transcribe_and_summarize endpoint
+Input:
+
 {
-  "url": "https://www.youtube.com/watch?v=XXXXXXXXXXX",
-  "task": "transcribe",
-  "language": null,
-  "vad_filter": true
+  "url": "https://www.youtube.com/watch?v=your_video_id"
 }
-```
 
-- `task`: `"transcribe"` keeps original language. `"translate"` outputs English.
-- `language`: force language code (e.g., `"en"`, `"hi"`).
-- `vad_filter`: enable voice activity detection to reduce noise.
+Output:
 
-Response:
-```json
 {
-  "text": "Full transcript here...",
-  "language": "en",
-  "duration": 123.45,
-  "segments": [
-    {"start": 0.0, "end": 3.1, "text": "Hello everyone..."},
-    ...
-  ]
+  "transcription": "Full transcription of the video...",
+  "summary": "Concise summary of the content..."
 }
-```
 
-## Docker
+🛠 Tech Stack
 
-```dockerfile
-# Dockerfile
-FROM python:3.11-slim
+FastAPI
+Uvicorn
+yt-dlp
+Whisper
+Transformers
 
-# System deps
-RUN apt-get update && apt-get install -y --no-install-recommends ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
-
-WORKDIR /app
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY app.py ./
-
-# Configure model (override at runtime)
-ENV WHISPER_MODEL=tiny
-ENV WHISPER_DEVICE=auto
-ENV WHISPER_COMPUTE_TYPE=int8_float16
-
-EXPOSE 8000
-CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-Build & run:
-```bash
-docker build -t yt-transcriber .
-docker run --rm -it -p 8000:8000 yt-transcriber
-```
-
-## Notes
-
-- First run downloads the Whisper model. Subsequent runs are much faster.
-- `tiny` is fastest but less accurate; `small` or `medium` improves quality.
-- For NVIDIA GPUs in Docker, run with `--gpus all` and set `WHISPER_DEVICE=cuda`.
+⚠️ Notes
+Hugging Face models may require a free access token
+ if you hit rate limits.
+Whisper can be slow on CPU. For faster performance, run with GPU + CUDA.

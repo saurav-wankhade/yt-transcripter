@@ -17,7 +17,7 @@ complete --command yt-dlp --long-option ignore-config --description 'Don'"'"'t l
 complete --command yt-dlp --long-option no-config-locations --description 'Do not load any custom configuration files (default). When given inside a configuration file, ignore all previous --config-locations defined in the current file'
 complete --command yt-dlp --long-option config-locations --description 'Location of the main configuration file; either the path to the config or its containing directory ("-" for stdin). Can be used multiple times and inside other configuration files'
 complete --command yt-dlp --long-option plugin-dirs --description 'Path to an additional directory to search for plugins. This option can be used multiple times to add multiple directories. Note that this currently only works for extractor plugins; postprocessor plugins can only be loaded from the default plugin directories'
-complete --command yt-dlp --long-option flat-playlist --description 'Do not extract the videos of a playlist, only list them'
+complete --command yt-dlp --long-option flat-playlist --description 'Do not extract a playlist'"'"'s URL result entries; some entry metadata may be missing and downloading may be bypassed'
 complete --command yt-dlp --long-option no-flat-playlist --description 'Fully extract the videos of a playlist (default)'
 complete --command yt-dlp --long-option live-from-start --description 'Download livestreams from the start. Currently only supported for YouTube (Experimental)'
 complete --command yt-dlp --long-option no-live-from-start --description 'Download livestreams from the current time (default)'
@@ -66,7 +66,7 @@ complete --command yt-dlp --long-option age-limit --description 'Download only v
 complete --command yt-dlp --long-option download-archive --description 'Download only videos not listed in the archive file. Record the IDs of all downloaded videos in it' --require-parameter
 complete --command yt-dlp --long-option no-download-archive --description 'Do not use archive file (default)'
 complete --command yt-dlp --long-option max-downloads --description 'Abort after downloading NUMBER files'
-complete --command yt-dlp --long-option break-on-existing --description 'Stop the download process when encountering a file that is in the archive'
+complete --command yt-dlp --long-option break-on-existing --description 'Stop the download process when encountering a file that is in the archive supplied with the --download-archive option'
 complete --command yt-dlp --long-option no-break-on-existing --description 'Do not stop the download process when encountering a file that is in the archive (default)'
 complete --command yt-dlp --long-option break-on-reject
 complete --command yt-dlp --long-option break-per-input --description 'Alters --max-downloads, --break-on-existing, --break-match-filters, and autonumber to reset per input URL'
@@ -114,7 +114,7 @@ complete --command yt-dlp --long-option autonumber-start
 complete --command yt-dlp --long-option restrict-filenames --description 'Restrict filenames to only ASCII characters, and avoid "&" and spaces in filenames'
 complete --command yt-dlp --long-option no-restrict-filenames --description 'Allow Unicode characters, "&" and spaces in filenames (default)'
 complete --command yt-dlp --long-option windows-filenames --description 'Force filenames to be Windows-compatible'
-complete --command yt-dlp --long-option no-windows-filenames --description 'Make filenames Windows-compatible only if using Windows (default)'
+complete --command yt-dlp --long-option no-windows-filenames --description 'Sanitize filenames only minimally'
 complete --command yt-dlp --long-option trim-filenames --description 'Limit the filename length (excluding extension) to the specified number of characters'
 complete --command yt-dlp --long-option no-overwrites --short-option w --description 'Do not overwrite any files'
 complete --command yt-dlp --long-option force-overwrites --description 'Overwrite all video and metadata files. This option includes --no-continue'
