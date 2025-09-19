@@ -5,15 +5,20 @@ import uuid
 import whisper
 from transformers import pipeline
 import yt_dlp
+from fastapi.middleware.cors import CORSMiddleware
 
-# Initialize FastAPI app
+
 app = FastAPI(title="YouTube Transcriber & Summarizer")
-
-# Load models (only once at startup)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # allow all for now
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 transcriber = whisper.load_model("tiny")  # use "small" / "medium" for better accuracy
 summarizer = pipeline("summarization", model="sshleifer/distilbart-cnn-12-6")
 
-# Request body schema
 class VideoRequest(BaseModel):
     url: str
 
