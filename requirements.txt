@@ -6,3 +6,4 @@ transformers==4.44.2
 torch==2.2.2
 pydantic==2.9.2
 numpy<2
+ffmpeg-python
