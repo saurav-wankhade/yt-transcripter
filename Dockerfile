@@ -1,31 +1,28 @@
-# Dockerfile
+# Use lightweight Python base
 FROM python:3.11-slim
-
 
 # Set working directory
 WORKDIR /app
 
-
-# System dependencies for yt-dlp, pydub (ffmpeg)
+# Install system dependencies (ffmpeg, compilers, cmake for faster-whisper)
 RUN apt-get update && apt-get install -y \
-ffmpeg \
-git \
-&& rm -rf /var/lib/apt/lists/*
+    ffmpeg \
+    build-essential \
+    cmake \
+    && rm -rf /var/lib/apt/lists/*
 
+# Copy requirements first (for caching)
+COPY requirements.txt .
 
-# Upgrade pip and install requirements
-COPY requirements.txt ./
-RUN pip install --upgrade pip setuptools wheel \
-&& pip install -r requirements.txt
+# Upgrade pip and install Python dependencies
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-
-# Copy application code
+# Copy app code
 COPY . .
 
-
-# Expose FastAPI port
+# Expose port
 EXPOSE 8000
 
-
-# Run the app with Uvicorn
+# Run FastAPI with uvicorn
 CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
